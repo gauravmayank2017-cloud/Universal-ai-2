@@ -2,24 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GHOST AI | OS</title>
+    <title>VOICE-FLIP AI</title>
     <style>
-        body { background: #050505; color: #00f3ff; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        #terminal { width: 80%; height: 400px; border: 1px solid #00f3ff; padding: 20px; overflow-y: auto; background: rgba(0,20,20,0.5); box-shadow: 0 0 20px #00f3ff33; margin-bottom: 20px; }
-        .input-area { width: 80%; display: flex; gap: 10px; }
-        input { flex: 1; background: transparent; border: 1px solid #00f3ff; color: #00f3ff; padding: 15px; outline: none; }
-        button { background: #00f3ff; color: black; border: none; padding: 15px 30px; cursor: pointer; font-weight: bold; }
-        .glitch { text-shadow: 2px 2px #ff00ff; animation: scan 2s infinite; }
-        @keyframes scan { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; text-align: center; padding: 20px; }
+        .upload-zone { border: 2px dashed #00ff41; padding: 40px; margin: 20px auto; width: 60%; cursor: pointer; }
+        #preview { width: 60%; margin-top: 20px; display: none; border: 1px solid #00ff41; }
+        .btn { background: #00ff41; color: #000; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; margin: 10px; }
+        .loading { display: none; color: yellow; font-weight: bold; }
     </style>
 </head>
 <body>
-    <h1 class="glitch">SYSTEM_GHOST_v1.0</h1>
-    <div id="terminal">>> STANDING BY FOR COMMAND...</div>
-    <div class="input-area">
-        <input type="text" id="userInput" placeholder="Type a command to Gemini...">
-        <button onclick="execute()">EXECUTE</button>
+    <h1>>> VOICE_FLIP_AI_v1.0</h1>
+    <div class="upload-zone" onclick="document.getElementById('videoInput').click()">
+        DROP VIDEO FILE OR CLICK TO UPLOAD
+        <input type="file" id="videoInput" hidden accept="video/*">
     </div>
+    
+    <select id="voiceType" class="btn" style="background: transparent; color: #00ff41; border: 1px solid #00ff41;">
+        <option value="deep">Deep Male Voice</option>
+        <option value="soft">Soft Female Voice</option>
+        <option value="robot">Cybernetic Robot</option>
+    </select>
+
+    <button class="btn" onclick="processVideo()">START VOICE TRANSFORMATION</button>
+    <div id="status" class="loading">PROCESSING NEURAL AUDIO...</div>
+    <video id="preview" controls></video>
 
     <script type="module" src="app.js"></script>
 </body>

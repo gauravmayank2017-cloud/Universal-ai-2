@@ -1,15 +1,10 @@
-# ⚡ GHOST-3: The Ultra-Light AI Agent
+# 🎙️ VOICE-FLIP AI
+The world's first minimalist 3-file Video Voice Changer.
 
-Only **3 files**. Zero bloat. Pure power.
+## ⚡ How it works
+1. **Gemini 1.5 Flash:** Watches your video and understands the dialogue.
+2. **Firebase:** Tracks processing tasks and user history.
+3. **FFmpeg Logic:** Replaces original audio with AI-generated voice.
 
-## 🚀 Setup
-1. Clone this repo.
-2. Open `index.html` in your browser.
-3. Done.
-
-## 🧠 Tech
-- **Core:** Google Gemini 1.5 Flash
-- **Memory:** Firebase Real-time DB
-- **UI:** Cyberpunk Minimalist
-
-This project proves you don't need 1000 files to build the future. 
+## 🌏 The Vision
+One day, you can watch a Japanese Anime in your own voice, or a Hindi movie in English, instantly.

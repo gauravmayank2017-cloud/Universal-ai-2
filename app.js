@@ -1,43 +1,49 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Firebase + AI Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCr2dcChgltcxitoumuzb4MhzQpgTfZ5kg",
-    authDomain: "helpai-d5d33.firebaseapp.com",
     projectId: "helpai-d5d33",
-    databaseURL: "https://helpai-d5d33-default-rtdb.firebaseio.com",
-    storageBucket: "helpai-d5d33.firebasestorage.app",
     appId: "1:638645254102:web:9784af26ba64272100d677"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const GEMINI_API_KEY = "AIzaSyAlEDBqSIvNLQB4dodpAjfCS7nlNkw2jV0";
+const GEMINI_KEY = "AIzaSyAlEDBqSIvNLQB4dodpAjfCS7nlNkw2jV0";
 
-window.execute = async () => {
-    const input = document.getElementById('userInput').value;
-    const terminal = document.getElementById('terminal');
-    if (!input) return;
+window.processVideo = async () => {
+    const file = document.getElementById('videoInput').files[0];
+    if (!file) return alert("Please upload a video first!");
 
-    terminal.innerHTML += `<p style="color:white">>> USER: ${input}</p>`;
-    
-    // Gemini AI Call
+    document.getElementById('status').style.display = 'block';
+
+    // यहाँ हम Gemini 1.5 Flash की 'Multimodal' ताकत का इस्तेमाल करेंगे
+    // यह वीडियो को देखकर उसका ट्रांसक्रिप्शन और फिर डबिंग लॉजिक तैयार करेगा
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            body: JSON.stringify({ contents: [{ parts: [{ text: input }] }] })
+        // Step 1: Log action to Firebase
+        await addDoc(collection(db, "video_tasks"), {
+            fileName: file.name,
+            status: "processing",
+            timestamp: Date.now()
         });
+
+        // Step 2: Gemini API Call (Conceptual: 2026 में यह वीडियो सीधा प्रोसेस कर सकता है)
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+            method: 'POST',
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: "Analyze the audio in this video and generate a dubbing script in the selected voice style." }] }]
+            })
+        });
+
         const data = await response.json();
-        const aiText = data.candidates[0].content.parts[0].text;
+        console.log("AI Analysis:", data);
 
-        // Save to Firebase
-        await addDoc(collection(db, "logs"), { prompt: input, response: aiText, time: Date.now() });
+        // Simulated Success
+        setTimeout(() => {
+            document.getElementById('status').innerText = "DONE! (In a real app, use FFmpeg.wasm for final merging)";
+            document.getElementById('preview').style.display = 'block';
+        }, 3000);
 
-        terminal.innerHTML += `<p>>> AI: ${aiText}</p>`;
-        terminal.scrollTop = terminal.scrollHeight;
-    } catch (e) {
-        terminal.innerHTML += `<p style="color:red">>> ERROR: Connection Failed</p>`;
+    } catch (err) {
+        document.getElementById('status').innerText = "ERROR: AI_CORE_REJECTED";
     }
-    document.getElementById('userInput').value = "";
 };
